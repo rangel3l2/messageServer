@@ -17,8 +17,9 @@
                 socket.send("User connected!")
             })      
             socket.on('message', 
-            function(data){
-            $('#messages').append($('<p>').text(data))
+            function(obj){  
+            
+            $('#messages').append($('<p>').text(obj.obj))
             })
             $('#sendBtn').on('click', function(){
             socket.send($('#username').val() + ':' + $('#message').val())

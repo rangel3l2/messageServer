@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, json
 from flask_socketio import SocketIO, send, emit
 
 
@@ -15,21 +15,24 @@ socketio = SocketIO(app, cors_allowed_origins
 def connected():
     print(request.sid)
     print("client has connected")
-    emit('connect', {"data":f"id:{request.sid} is connected"})
+    emit('connect', {"data":f"id:{request.sid} is connected"}, broadcast= True)
 
 
-@socketio.on('message')
+@socketio.on("message")
 def handle_message(message):
-    print("Receive Message: "+ message)
-    if message != "User connected!":
-        print(message)
-        emit('message',{"data":message})
+    
+    #if message != "User connected!":
+   
+    #print(f'data: {data}')
+    print(f'ola{message}')
+    emit('message',{"obj":message}, broadcast=True)
 
 @socketio.on("disconnect")
 def disconnected():
     """event listener when client disconnects to the server"""
     print("user disconnected")
     emit("disconnect",f"user {request.sid} disconnected",broadcast=True)
+
 if __name__ == '__main__':
 
-    socketio.run(app, debug=True, )
+    socketio.run(app, debug=True )
